@@ -495,6 +495,14 @@ class Endpoint implements RepositoryInterface, EventListenerInterface, EventDisp
             $parts = explode('\\', $self);
 
             if ($self === self::class || count($parts) < 3) {
+                $subClass = App::className(
+                    Inflector::singularize($this->getRegistryAlias()),
+                    'Model/Resource'
+                );
+                if ($subClass && is_subclass_of($subClass,$default)) {
+                    return $this->_resourceClass = $subClass;
+                }
+
                 return $this->_resourceClass = $default;
             }
 
